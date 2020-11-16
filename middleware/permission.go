@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"JuneGoBlog/src/junebao.top"
+	"GinTools"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )

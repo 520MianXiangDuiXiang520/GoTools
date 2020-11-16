@@ -1,7 +1,7 @@
 package junebao_top
 
 import (
-	"JuneGoBlog/src/junebao.top/utils"
+	"GinTools/utils"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"

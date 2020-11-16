@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	junebaotop "JuneGoBlog/src/junebao.top"
+	ginTools "GinTools"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
@@ -44,7 +44,7 @@ func CorsHandler() gin.HandlerFunc {
 
 		if method == "OPTIONS" {
 			context.Abort()
-			context.JSON(http.StatusOK, junebaotop.SuccessRespHeader)
+			context.JSON(http.StatusOK, ginTools.SuccessRespHeader)
 		}
 		context.Next()
 	}
