@@ -1,3 +1,3 @@
-module gin_tools
+module GinTools
 
 go 1.14
