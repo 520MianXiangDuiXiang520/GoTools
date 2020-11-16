@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	ginTools "GinTools"
+	ginTools "github.com/520MianXiangDuiXiang520/GinTools"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"

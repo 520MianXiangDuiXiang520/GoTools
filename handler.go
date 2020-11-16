@@ -1,8 +1,8 @@
 package junebao_top
 
 import (
-	"GinTools/utils"
 	"fmt"
+	"github.com/520MianXiangDuiXiang520/GinTools/utils"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"reflect"
