@@ -48,8 +48,8 @@ var (
 	db          = &gorm.DB{}
 )
 
-func InitDBSetting(maxIdle, maxOpen int, maxLifeTime time.Duration, logMode bool) {
-	dbConnector.setting = utils.GetSetting().Database
+func InitDBSetting(set *utils.DBSetting, maxIdle, maxOpen int, maxLifeTime time.Duration, logMode bool) {
+	dbConnector.setting = set
 	db = dbConnector.NewConnect()
 	setup(maxIdle, maxOpen, maxLifeTime, logMode)
 }

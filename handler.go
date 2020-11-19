@@ -19,19 +19,28 @@ func EasyHandler(cf CheckFunc, lf LogicFunc, req interface{}) gin.HandlerFunc {
 	return func(context *gin.Context) {
 		t := reflect.TypeOf(req)
 		request := reflect.New(t).Interface().(BaseReqInter)
-		var resp interface{}
+
+		resp := struct {
+			Header BaseRespInter
+		}{
+			Header: ParamErrorRespHeader,
+		}
+
 		if err := request.JSON(context); err != nil {
 			msg := fmt.Sprintf("Request binding failed，type of req is %v, context is %v",
 				reflect.TypeOf(req), context)
 			utils.ExceptionLog(err, msg)
-			resp = ParamErrorRespHeader
+			resp.Header = ParamErrorRespHeader
 		} else {
-			if checkResp, err := cf(context, request); err != nil {
-				resp = checkResp
-			} else {
-				resp = lf(context, request)
+			if utils.CheckRequest(request) {
+				if checkResp, err := cf(context, request); err != nil {
+					resp.Header = checkResp
+				} else {
+					resp.Header = lf(context, request)
+				}
 			}
 		}
+
 		context.Set("resp", resp)
 		context.JSON(http.StatusOK, resp)
 	}
