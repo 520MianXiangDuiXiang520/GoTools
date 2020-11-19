@@ -17,13 +17,9 @@ type DBSetting struct {
 	Port     int    `json:"port"`
 }
 
-type Setting struct {
-	Database *DBSetting `json:"database"`
-}
-
 func load(setting interface{}, path string) {
-	if reflect.TypeOf(setting).Elem().Kind() != reflect.Struct {
-		panic("setting mast is a struct")
+	if reflect.ValueOf(setting).Elem().Kind() != reflect.Struct {
+		panic("setting is not a struct")
 	}
 	fp, err := os.Open(path)
 	if err != nil {
@@ -32,16 +28,18 @@ func load(setting interface{}, path string) {
 	}
 	defer fp.Close()
 	decoder := json.NewDecoder(fp)
-	err = decoder.Decode(setting)
+	err = decoder.Decode(&setting)
 	if err != nil {
 		ExceptionLog(err, "Fail to decode json setting")
 		panic(err)
 	}
 }
 
-func InitSetting(s interface{}, fPath string) interface{} {
+func InitSetting(s interface{}, fPath string) {
+	if reflect.ValueOf(s).Kind() != reflect.Ptr {
+		panic("The s is not a ptr")
+	}
 	_, currently, _, _ := runtime.Caller(1)
 	filename := path.Join(path.Dir(currently), fPath)
-	load(&s, filename)
-	return s
+	load(s, filename)
 }
