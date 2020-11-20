@@ -8,6 +8,7 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"unicode/utf8"
 )
 
 var (
@@ -30,7 +31,7 @@ func findNum(str string) []int {
 }
 
 func checkStringLen(v string, min, max int) bool {
-	return len(v) >= min && len(v) <= max
+	return utf8.RuneCountInString(v) >= min && utf8.RuneCountInString(v) <= max
 }
 
 func isEmail(v string) bool {
