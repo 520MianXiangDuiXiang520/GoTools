@@ -2,6 +2,7 @@
 package utils
 
 import (
+	"fmt"
 	"log"
 	"reflect"
 	"regexp"
@@ -152,32 +153,71 @@ func checkPtr(v reflect.Value, tag string) bool {
 	return true
 }
 
-func CheckRequest(req interface{}) (ok bool) {
-	v := reflect.ValueOf(req)
-	t := reflect.TypeOf(req)
+func switchType(field reflect.StructField, value reflect.Value, tag string) bool {
+	switch field.Type.Kind() {
+	case reflect.String:
+		if !checkString(value, tag) {
+			return false
+		}
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+		if !checkInt(value, tag) {
+			return false
+		}
+	case reflect.Slice:
+		if !checkSlice(value, tag) {
+			return false
+		}
+	case reflect.Ptr:
+		if !checkPtr(value, tag) {
+			return false
+		}
+	case reflect.Struct:
+		if !checkStructReq(value.Interface()) {
+			return false
+		}
+	}
+	return true
+}
+
+func checkStructReq(s interface{}) bool {
+	v := reflect.ValueOf(s)
+	t := reflect.TypeOf(s)
+	for i := 0; i < t.NumField(); i++ {
+		field := t.Field(i)
+		value := v.Field(i)
+		tag := field.Tag.Get("check")
+		if !switchType(field, value, tag) {
+			return false
+		}
+	}
+	return true
+}
+
+func checkPtrReq(s interface{}) bool {
+	v := reflect.ValueOf(s)
+	t := reflect.TypeOf(s)
+	if t.Elem().Kind() != reflect.Struct {
+		panic(fmt.Sprintf("check: %v can not used in CheckRequest", t.Elem().Kind()))
+	}
 	for i := 0; i < t.Elem().NumField(); i++ {
 		field := t.Elem().Field(i)
 		value := v.Elem().Field(i)
 		tag := field.Tag.Get("check")
-		switch field.Type.Kind() {
-		case reflect.String:
-			if !checkString(value, tag) {
-				return false
-			}
-		case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
-			if !checkInt(value, tag) {
-				return false
-			}
-		case reflect.Slice:
-			if !checkSlice(value, tag) {
-				return false
-			}
-		case reflect.Ptr:
-			if !checkPtr(value, tag) {
-				return false
-			}
+		if !switchType(field, value, tag) {
+			return false
 		}
-
 	}
 	return true
+}
+
+func CheckRequest(req interface{}) (ok bool) {
+	t := reflect.TypeOf(req)
+	switch t.Kind() {
+	case reflect.Ptr:
+		return checkPtrReq(req)
+	case reflect.Struct:
+		return checkStructReq(req)
+	}
+	panic(fmt.Sprintf("check: %v can not used in CheckRequest", t.Kind()))
+	return false
 }
