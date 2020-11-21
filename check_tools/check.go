@@ -1,5 +1,5 @@
 // 通过标签自动检查请求格式是否正确
-package utils
+package check_tools
 
 import (
 	"fmt"
@@ -8,7 +8,6 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
-	"unicode/utf8"
 )
 
 var (
@@ -30,19 +29,6 @@ func findNum(str string) []int {
 	return res
 }
 
-func checkStringLen(v string, min, max int) bool {
-	return utf8.RuneCountInString(v) >= min && utf8.RuneCountInString(v) <= max
-}
-
-func isEmail(v string) bool {
-	if len(v) <= 0 {
-		return false
-	}
-	emailRules := `^[A-Za-z0-9_.]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$`
-	ok, err := regexp.MatchString(emailRules, v)
-	return ok && err == nil
-}
-
 func checkLen(tag, v string) bool {
 	n := findNum(tag)
 	if len(n) < 2 {
@@ -51,38 +37,6 @@ func checkLen(tag, v string) bool {
 	if !checkStringLen(v, n[0], n[1]) {
 		log.Printf("[Check] %s length is %d, not in [%d, %d]\n", v, len(v), n[0], n[1])
 		return false
-	}
-	return true
-}
-
-// 检查 string 类型的字段, 大小写，空格不敏感
-// - 检查空字符串:  `check:"not null"`
-// - 检查字符串长度: `check:"len: [0, 10]"`
-// - 检查邮箱格式:   `check:"email"`
-func checkString(value reflect.Value, tag string) (ok bool) {
-	tags := strings.Split(tag, ";")
-	v := value.String()
-	for _, t := range tags {
-		m := strings.Replace(t, " ", "", -1)
-		m = strings.ToLower(m)
-		switch {
-		case m == "notnull":
-			if v == "" {
-				log.Flags()
-				log.Printf("[Check] \"\" is not null\n")
-				return false
-			}
-		case m == "email":
-			if !isEmail(v) {
-				log.Printf("[Check] %s is not a emai\n", v)
-				return false
-			}
-		case checkLengthRegexp.Match([]byte(m)):
-			if !checkLen(t, v) {
-				return false
-			}
-		}
-
 	}
 	return true
 }
@@ -158,22 +112,27 @@ func switchType(field reflect.StructField, value reflect.Value, tag string) bool
 	switch field.Type.Kind() {
 	case reflect.String:
 		if !checkString(value, tag) {
+			log.Printf("[check] [%v] Failed label inspection", field.Name)
 			return false
 		}
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
 		if !checkInt(value, tag) {
+			log.Printf("[check] [%v] Failed label inspection", field.Name)
 			return false
 		}
 	case reflect.Slice:
 		if !checkSlice(value, tag) {
+			log.Printf("[check] [%v] Failed label inspection", field.Name)
 			return false
 		}
 	case reflect.Ptr:
 		if !checkPtr(value, tag) {
+			log.Printf("[check] [%v] Failed label inspection", field.Name)
 			return false
 		}
 	case reflect.Struct:
 		if !checkStructReq(value.Interface()) {
+			log.Printf("[check] [%v] Failed label inspection", field.Name)
 			return false
 		}
 	}

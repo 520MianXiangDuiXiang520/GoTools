@@ -1,30 +1,18 @@
 package middleware
 
 import (
-	ginTools "github.com/520MianXiangDuiXiang520/GinTools"
+	"github.com/520MianXiangDuiXiang520/GinTools/gin_tools"
 	"github.com/gin-gonic/gin"
-	"log"
 	"net/http"
 )
 
-// 允许白名单
-var AccessControlAllowOrigin []string = []string{
-	"http://localhost:8081",
-	"http://localhost:8082",
-	"http://127.0.0.1:8889",
-	"http://localhost:8889",
-	"http://localhost:81",
-	"http://39.106.168.39:80",
-	"http://39.106.168.39:81",
-}
-
-func CorsHandler() gin.HandlerFunc {
+// accessList: 允许访问的白名单
+func CorsHandler(accessList []string) gin.HandlerFunc {
 	return func(context *gin.Context) {
 		origin := context.GetHeader("Origin")
-		log.Println(origin)
 		method := context.Request.Method
 		context.Writer.Header().Set("Access-Control-Allow-Origin", "*")
-		for _, allow := range AccessControlAllowOrigin {
+		for _, allow := range accessList {
 			if allow == origin {
 				context.Header("Access-Control-Allow-Origin", origin)
 				break
@@ -40,11 +28,10 @@ func CorsHandler() gin.HandlerFunc {
 		context.Header("Access-Control-Max-Age", "172800")
 		context.Header("Access-Control-Allow-Credentials", "true")
 		context.Set("content-type", "application/json")
-		//设置返回格式是json
-
+		// 设置返回格式是json
 		if method == "OPTIONS" {
 			context.Abort()
-			context.JSON(http.StatusOK, ginTools.SuccessRespHeader)
+			context.JSON(http.StatusOK, gin_tools.SuccessRespHeader)
 		}
 		context.Next()
 	}

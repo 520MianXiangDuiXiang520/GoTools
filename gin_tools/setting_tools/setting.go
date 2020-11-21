@@ -1,7 +1,8 @@
-package utils
+package setting_tools
 
 import (
 	"encoding/json"
+	"github.com/520MianXiangDuiXiang520/GinTools/log_tools"
 	"os"
 	"path"
 	"reflect"
@@ -23,14 +24,14 @@ func load(setting interface{}, path string) {
 	}
 	fp, err := os.Open(path)
 	if err != nil {
-		ExceptionLog(err, "Fail to open setting")
+		utils.ExceptionLog(err, "Fail to open setting")
 		panic(err)
 	}
 	defer fp.Close()
 	decoder := json.NewDecoder(fp)
 	err = decoder.Decode(&setting)
 	if err != nil {
-		ExceptionLog(err, "Fail to decode json setting")
+		utils.ExceptionLog(err, "Fail to decode json setting")
 		panic(err)
 	}
 }

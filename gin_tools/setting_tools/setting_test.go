@@ -1,4 +1,4 @@
-package utils
+package setting_tools
 
 import (
 	"fmt"

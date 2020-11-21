@@ -1,16 +1,20 @@
-package dao
+package dao_tools
 
 import (
 	"fmt"
-	"github.com/520MianXiangDuiXiang520/GinTools/utils"
+	"github.com/520MianXiangDuiXiang520/GinTools/gin_tools/setting_tools"
+	"github.com/520MianXiangDuiXiang520/GinTools/log_tools"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"strings"
 	"time"
 )
 
+type DBSetting interface {
+}
+
 type DBConnector struct {
-	setting *utils.DBSetting
+	setting *setting_tools.DBSetting
 }
 
 func (conn *DBConnector) NewConnect() *gorm.DB {
@@ -48,7 +52,7 @@ var (
 	db          = &gorm.DB{}
 )
 
-func InitDBSetting(set *utils.DBSetting, maxIdle, maxOpen int, maxLifeTime time.Duration, logMode bool) {
+func InitDBSetting(set *setting_tools.DBSetting, maxIdle, maxOpen int, maxLifeTime time.Duration, logMode bool) {
 	dbConnector.setting = set
 	db = dbConnector.NewConnect()
 	setup(maxIdle, maxOpen, maxLifeTime, logMode)

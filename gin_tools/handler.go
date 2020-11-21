@@ -1,8 +1,9 @@
-package junebao_top
+package gin_tools
 
 import (
 	"fmt"
-	"github.com/520MianXiangDuiXiang520/GinTools/utils"
+	"github.com/520MianXiangDuiXiang520/GinTools/check_tools"
+	"github.com/520MianXiangDuiXiang520/GinTools/log_tools"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"reflect"
@@ -32,7 +33,7 @@ func EasyHandler(cf CheckFunc, lf LogicFunc, req interface{}) gin.HandlerFunc {
 			utils.ExceptionLog(err, msg)
 			resp.Header = ParamErrorRespHeader
 		} else {
-			if utils.CheckRequest(request) {
+			if check_tools.CheckRequest(request) {
 				if checkResp, err := cf(context, request); err != nil {
 					resp.Header = checkResp
 				} else {

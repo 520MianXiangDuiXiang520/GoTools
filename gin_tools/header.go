@@ -1,4 +1,4 @@
-package junebao_top
+package gin_tools
 
 import (
 	"github.com/gin-gonic/gin"
