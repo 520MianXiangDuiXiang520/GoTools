@@ -16,8 +16,8 @@ type SMTPDialer struct {
 }
 
 type EmailUser struct {
-	Name    string
-	Address string
+	Name    string `json:"name"`
+	Address string `json:"address"`
 }
 
 type EmailCTX struct {
