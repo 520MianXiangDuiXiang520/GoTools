@@ -1,6 +1,7 @@
 package email_tools
 
 import (
+	"github.com/520MianXiangDuiXiang520/GinTools/path_tools"
 	ge "gopkg.in/gomail.v2"
 	"path"
 	"runtime"
@@ -74,9 +75,14 @@ func Send(c *EmailCTX) (err error) {
 		m.SetHeader("Bcc", formatAddressList(c.BccList)...)
 	}
 	if len(c.Path) > 0 {
-		_, currently, _, _ := runtime.Caller(1)
-		filename := path.Join(path.Dir(currently), c.Path)
-		m.Attach(filename)
+		if !path_tools.IsAbs(c.Path) {
+			_, currently, _, _ := runtime.Caller(1)
+			filename := path.Join(path.Dir(currently), c.Path)
+			m.Attach(filename)
+		} else {
+			m.Attach(c.Path)
+		}
+
 	}
 	m.SetHeader("Subject", c.Subject)
 	m.SetBody("text/html", c.Body)
