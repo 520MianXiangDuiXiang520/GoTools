@@ -22,24 +22,38 @@ func EasyHandler(cf CheckFunc, lf LogicFunc, req interface{}) gin.HandlerFunc {
 		request := reflect.New(t).Interface().(BaseReqInter)
 
 		resp := struct {
-			Header BaseRespInter
+			Header BaseRespInter `json:"header"`
 		}{
 			Header: ParamErrorRespHeader,
 		}
 
+		// 请求数据绑定
 		if err := request.JSON(context); err != nil {
 			msg := fmt.Sprintf("Request binding failed，type of req is %v, context is %v",
 				reflect.TypeOf(req), context)
 			utils.ExceptionLog(err, msg)
 			resp.Header = ParamErrorRespHeader
+			context.Set("resp", resp)
+			context.JSON(http.StatusOK, resp)
 		} else {
-			if check_tools.CheckRequest(request) {
+			// 标签检查请求参数
+			if !check_tools.CheckRequest(request) {
+				resp.Header = ParamErrorRespHeader
+				context.Set("resp", resp)
+				context.JSON(http.StatusOK, resp)
+			} else {
+				// 自定义方法检查请求参数
 				if checkResp, err := cf(context, request); err != nil {
-					resp.Header = checkResp
+					context.Set("resp", checkResp)
+					context.JSON(http.StatusOK, checkResp)
 				} else {
-					resp.Header = lf(context, request)
+					// 执行业务逻辑
+					r := lf(context, request)
+					context.Set("resp", r)
+					context.JSON(http.StatusOK, r)
 				}
 			}
+
 		}
 
 		context.Set("resp", resp)
