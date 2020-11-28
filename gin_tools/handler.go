@@ -55,8 +55,5 @@ func EasyHandler(cf CheckFunc, lf LogicFunc, req interface{}) gin.HandlerFunc {
 			}
 
 		}
-
-		context.Set("resp", resp)
-		context.JSON(http.StatusOK, resp)
 	}
 }
