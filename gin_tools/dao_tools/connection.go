@@ -30,7 +30,6 @@ type DBConnector struct {
 }
 
 func (conn *DBConnector) NewConnect() *gorm.DB {
-	fmt.Println("1")
 	connURI := ""
 	switch strings.ToLower(conn.Engine) {
 	case "mysql":
@@ -131,7 +130,6 @@ func GetDB() *gorm.DB {
 		lock.Lock()
 		if db == nil {
 			db = dbConnector.NewConnect()
-			fmt.Println(dbConnector)
 			setup(dbConnector.MaxIdleConn, dbConnector.MaxOpenConn, dbConnector.MaxLifetime, dbConnector.LogMode)
 		}
 		lock.Unlock()
