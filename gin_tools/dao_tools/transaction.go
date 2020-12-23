@@ -8,10 +8,15 @@ import (
 
 type DaoLogic interface{}
 
-// 使用数据库事务执行方法 def, 返回执行结果, 如果 def 执行过程中发生错误导致
-// panic 或 主动返回一个 error 时数据库会回滚保证一致性.
-//   - def:  要执行的方法, 该方法的最后一个返回值应该是 error 类型
-//   - args: 方法参数, 第一个参数需要是 *DB 类型, 在真实执行时,会被替换掉
+// 将 def 以一个事务的方式执行。
+//
+// def 是执行一组 ORM 语句的函数，他应该满足以下条件：
+//
+// 1. 第一个参数是 *gorm.DB 类型，def 中的所有 ORM 操作都应该使用改对象。
+//
+// 2. 返回应该至少有一个是 error 类型的，如果有多个返回值时，error 类型的应该作为最后一个。
+//
+// 函数会返回 def 执行的结果，他以 reflect.Value 切片的形式返回
 func UseTransaction(def DaoLogic, args []interface{}) ([]reflect.Value, error) {
 	var err error
 	tx := GetDB().Begin()
