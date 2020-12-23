@@ -170,6 +170,7 @@ func checkPtrReq(s interface{}) bool {
 	return true
 }
 
+// 请使用 Check 方法
 func CheckRequest(req interface{}) (ok bool) {
 	t := reflect.TypeOf(req)
 	switch t.Kind() {
@@ -180,4 +181,8 @@ func CheckRequest(req interface{}) (ok bool) {
 	}
 	panic(fmt.Sprintf("check: %v can not used in CheckRequest", t.Kind()))
 	return false
+}
+
+func Check(req interface{}) (ok bool) {
+	return CheckRequest(req)
 }
