@@ -9,15 +9,6 @@ import (
 	"runtime"
 )
 
-type DBSetting struct {
-	Engine   string `json:"engine"`
-	DBName   string `json:"db_name"`
-	User     string `json:"user"`
-	Password string `json:"password"`
-	Host     string `json:"host"`
-	Port     int    `json:"port"`
-}
-
 func load(setting interface{}, path string) {
 	if reflect.ValueOf(setting).Elem().Kind() != reflect.Struct {
 		panic("setting is not a struct")
