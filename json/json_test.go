@@ -1,7 +1,6 @@
-package setting_tools
+package json
 
 import (
-	"fmt"
 	"testing"
 )
 
@@ -20,6 +19,8 @@ type Setting struct {
 
 func TestInitSetting(t *testing.T) {
 	s := Setting{}
-	InitSetting(&s, "./test_setting.json")
-	fmt.Println(s.Database.User)
+	FromFileLoadToObj(&s, "./test_setting.json")
+	if s.Database.Port != 3306 {
+		t.Error("db")
+	}
 }

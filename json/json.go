@@ -1,4 +1,4 @@
-package setting_tools
+package json
 
 import (
 	"encoding/json"
@@ -9,25 +9,26 @@ import (
 	"runtime"
 )
 
-func load(setting interface{}, path string) {
-	if reflect.ValueOf(setting).Elem().Kind() != reflect.Struct {
-		panic("setting is not a struct")
+func load(obj interface{}, path string) {
+	if reflect.ValueOf(obj).Elem().Kind() != reflect.Struct {
+		panic("obj is not a struct")
 	}
 	fp, err := os.Open(path)
 	if err != nil {
-		utils.ExceptionLog(err, "Fail to open setting")
+		utils.ExceptionLog(err, "Fail to open obj")
 		panic(err)
 	}
 	defer fp.Close()
 	decoder := json.NewDecoder(fp)
-	err = decoder.Decode(&setting)
+	err = decoder.Decode(&obj)
 	if err != nil {
-		utils.ExceptionLog(err, "Fail to decode json setting")
+		utils.ExceptionLog(err, "Fail to decode json obj")
 		panic(err)
 	}
 }
 
-func InitSetting(s interface{}, fPath string) {
+// FromFileLoadToObj 从 fPath 路径下的 json 文件中加载数据到 s 对象
+func FromFileLoadToObj(s interface{}, fPath string) {
 	if reflect.ValueOf(s).Kind() != reflect.Ptr {
 		panic("The s is not a ptr")
 	}
