@@ -34,3 +34,25 @@ func TestCheckRequest2(t *testing.T) {
 	s := "111"
 	CheckRequest(&s)
 }
+
+type numTest struct {
+	NumInt    int    `check:"more: 10"`
+	NumUint   uint   `check:"less: 20"`
+	NumInt64  int64  `check:"equal: 32"`
+	NumInt32  int32  `check:"equal: 32"`
+	NumUint32 uint32 `check:"equal: 32"`
+}
+
+// 2020/12/27 测试数值大小检查
+func TestCheck(t *testing.T) {
+	n := numTest{
+		NumInt:    15,
+		NumUint:   uint(10),
+		NumInt32:  int32(32),
+		NumInt64:  int64(32),
+		NumUint32: uint32(32),
+	}
+	if !Check(n) {
+		t.Error()
+	}
+}

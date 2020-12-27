@@ -13,6 +13,9 @@ import (
 var (
 	checkLengthRegexp, _ = regexp.Compile("len:\\[\\d*,\\d*\\]")
 	checkSizeRegexp, _   = regexp.Compile("size:\\[\\d*,\\d*\\]")
+	checkMoreRegexp, _   = regexp.Compile("more:\\d*")
+	checkLessRegexp, _   = regexp.Compile("less:\\d*")
+	checkEqualRegexp, _  = regexp.Compile("less:\\d*")
 )
 
 func findNum(str string) []int {
@@ -63,6 +66,36 @@ func checkInt(v reflect.Value, tag string) bool {
 			}
 			if value < int64(n[0]) || value > int64(n[1]) {
 				log.Printf("[Check]  %d not in [%d, %d]\n", value, n[0], n[1])
+				return false
+			}
+		case checkMoreRegexp.Match([]byte(m)):
+			// more:10
+			num, err := strconv.Atoi(m[5:])
+			if err != nil {
+				panic("WrongLabel" + t)
+			}
+			if value <= int64(num) {
+				log.Printf("[Check]  %d no greater than %d \n", value, num)
+				return false
+			}
+		case checkLessRegexp.Match([]byte(m)):
+			// less:10
+			num, err := strconv.Atoi(m[5:])
+			if err != nil {
+				panic("WrongLabel" + t)
+			}
+			if value >= int64(num) {
+				log.Printf("[Check]  %d not less than %d \n", value, num)
+				return false
+			}
+		case checkEqualRegexp.Match([]byte(m)):
+			// equal:10
+			num, err := strconv.Atoi(m[6:])
+			if err != nil {
+				panic("WrongLabel" + t)
+			}
+			if value != int64(num) {
+				log.Printf("[Check]  %d not equal to %d \n", value, num)
 				return false
 			}
 		}
