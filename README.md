@@ -63,6 +63,7 @@ go get github.com/520MianXiangDuiXiang520/GinTools
 
 * `conn`: 一个数据库连接工具
 * `Transaction`: 一个数据库事务工具
+* `redis`: 一个 redis 连接工具
 
 具体用法请参考 [godoc](https://pkg.go.dev/github.com/520MianXiangDuiXiang520/GinTools/gin_tools/dao_tools) 文档
 

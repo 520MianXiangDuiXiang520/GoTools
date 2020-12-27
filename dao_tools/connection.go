@@ -62,23 +62,31 @@ func setup(maxIdle, maxOpen int, maxLifeTime time.Duration, logMode bool) {
 var (
 	dbConnector *DBConnector
 	db          *gorm.DB
-	lock        = sync.Mutex{}
+	dbLock      = sync.Mutex{}
 )
+
+func transform(from, to interface{}) error {
+	data, err := json.Marshal(from)
+	if err != nil {
+		utils.ExceptionLog(err, fmt.Sprintf("marshal %v Fail!", from))
+		return err
+	}
+	err = json.Unmarshal(data, &to)
+	if err != nil {
+		utils.ExceptionLog(err, fmt.Sprintf("Fail to UnMarchall"))
+		return err
+	}
+	if !check_tools.Check(to) {
+		return errors.New("miss field")
+	}
+	return nil
+}
 
 func initDBSetting(set interface{}) (*DBConnector, error) {
 	conn := DBConnector{}
-	data, err := json.Marshal(set)
+	err := transform(set, &conn)
 	if err != nil {
-		utils.ExceptionLog(err, fmt.Sprintf("marshal %v Fail!", set))
 		return nil, err
-	}
-	err = json.Unmarshal(data, &conn)
-	if err != nil {
-		utils.ExceptionLog(err, fmt.Sprintf("Fail to UnMarchall"))
-		return nil, err
-	}
-	if !check_tools.Check(conn) {
-		return nil, errors.New("miss field")
 	}
 	return &conn, nil
 }
@@ -107,7 +115,7 @@ func initDBSetting(set interface{}) (*DBConnector, error) {
 // 初始化成功后，可以调用 GetDB 获取具体的 *gorm.DB 对象.
 func InitDBSetting(set interface{}) error {
 	if dbConnector == nil {
-		lock.Lock()
+		dbLock.Lock()
 		if dbConnector == nil {
 			res, err := initDBSetting(set)
 			if err != nil {
@@ -115,7 +123,7 @@ func InitDBSetting(set interface{}) error {
 			}
 			dbConnector = res
 		}
-		lock.Unlock()
+		dbLock.Unlock()
 	}
 	return nil
 }
@@ -127,12 +135,12 @@ func GetDB() *gorm.DB {
 		panic("Database configuration is not loaded")
 	}
 	if db == nil {
-		lock.Lock()
+		dbLock.Lock()
 		if db == nil {
 			db = dbConnector.NewConnect()
 			setup(dbConnector.MaxIdleConn, dbConnector.MaxOpenConn, dbConnector.MaxLifetime, dbConnector.LogMode)
 		}
-		lock.Unlock()
+		dbLock.Unlock()
 	}
 	return db
 }
