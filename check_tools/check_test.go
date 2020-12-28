@@ -26,6 +26,19 @@ func TestCheckRequest(t *testing.T) {
 	}
 }
 
+func TestCheck2(t *testing.T) {
+	s := &TestStruct{
+		Name: "12345",
+		Age:  1234,
+		Q:    []int{1, 2},
+	}
+	s.FName = "123"
+	ok := Check(s)
+	if ok {
+		t.Errorf("")
+	}
+}
+
 func TestFindNum(t *testing.T) {
 	fmt.Println(findNum("len: [0, 10]"))
 }

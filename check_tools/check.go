@@ -59,8 +59,8 @@ func checkInt(v reflect.Value, tag string) bool {
 				log.Printf("[Check] 0 is not null\n")
 				return false
 			}
-		case checkSizeRegexp.Match([]byte(t)):
-			n := findNum(t)
+		case checkSizeRegexp.Match([]byte(m)):
+			n := findNum(m)
 			if len(n) < 2 {
 				panic("WrongLabel" + t)
 			}
