@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"github.com/520MianXiangDuiXiang520/GinTools/gin_tools"
+	juneGin "github.com/520MianXiangDuiXiang520/GinTools/gin"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -15,7 +15,7 @@ func Permiter(license PermiterFunc) gin.HandlerFunc {
 		if !license(context) {
 			context.Abort()
 			context.JSON(http.StatusForbidden,
-				gin_tools.ForbiddenErrorRespHeader)
+				juneGin.ForbiddenErrorRespHeader)
 		}
 	}
 }

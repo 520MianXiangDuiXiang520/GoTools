@@ -1,8 +1,8 @@
-package dao_tools
+package dao
 
 import (
 	"errors"
-	"github.com/520MianXiangDuiXiang520/GinTools/log_tools"
+	"github.com/520MianXiangDuiXiang520/GinTools/log"
 	"reflect"
 )
 

@@ -1,9 +1,9 @@
-package gin_tools
+package gin
 
 import (
 	"fmt"
-	"github.com/520MianXiangDuiXiang520/GinTools/check_tools"
-	"github.com/520MianXiangDuiXiang520/GinTools/log_tools"
+	"github.com/520MianXiangDuiXiang520/GinTools/check"
+	"github.com/520MianXiangDuiXiang520/GinTools/log"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"reflect"
@@ -37,7 +37,7 @@ func EasyHandler(cf CheckFunc, lf LogicFunc, req interface{}) gin.HandlerFunc {
 			context.JSON(http.StatusOK, resp)
 		} else {
 			// 标签检查请求参数
-			if !check_tools.CheckRequest(request) {
+			if !check.CheckRequest(request) {
 				resp.Header = ParamErrorRespHeader
 				context.Set("resp", resp)
 				context.JSON(http.StatusOK, resp)

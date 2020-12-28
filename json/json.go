@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/520MianXiangDuiXiang520/GinTools/log_tools"
-	"github.com/520MianXiangDuiXiang520/GinTools/path_tools"
+	"github.com/520MianXiangDuiXiang520/GinTools/log"
+	junePath "github.com/520MianXiangDuiXiang520/GinTools/path"
 	"os"
 	"path"
 	"reflect"
@@ -36,7 +36,7 @@ func FromFileLoadToObj(s interface{}, fPath string) {
 		utils.ExceptionLog(errors.New("TypeError"), msg)
 		panic("The s is not a ptr")
 	}
-	if !path_tools.IsAbs(fPath) {
+	if !junePath.IsAbs(fPath) {
 		_, currently, _, _ := runtime.Caller(1)
 		fPath = path.Join(path.Dir(currently), fPath)
 	}

@@ -1,4 +1,4 @@
-package path_tools
+package path
 
 import (
 	"path"

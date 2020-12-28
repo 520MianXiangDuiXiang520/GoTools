@@ -1,7 +1,7 @@
-package email_tools
+package email
 
 import (
-	"github.com/520MianXiangDuiXiang520/GinTools/path_tools"
+	junePath "github.com/520MianXiangDuiXiang520/GinTools/path"
 	ge "gopkg.in/gomail.v2"
 	"path"
 	"runtime"
@@ -16,18 +16,18 @@ type SMTPDialer struct {
 	dialer   *ge.Dialer
 }
 
-type EmailUser struct {
+type Role struct {
 	Name    string `json:"name"`
 	Address string `json:"address"`
 }
 
-type EmailCTX struct {
-	ToList  []EmailUser `json:"to_list"`  // 收件人列表
-	CcList  []EmailUser `json:"cc_list"`  // 抄送列表
-	BccList []EmailUser `json:"bcc_list"` // 密送列表
-	Subject string      `json:"subject"`  // 邮件主题
-	Body    string      `json:"body"`     // 邮件正文
-	Path    string      `json:"path"`     // 附件路径
+type Context struct {
+	ToList  []Role `json:"to_list"`  // 收件人列表
+	CcList  []Role `json:"cc_list"`  // 抄送列表
+	BccList []Role `json:"bcc_list"` // 密送列表
+	Subject string `json:"subject"`  // 邮件主题
+	Body    string `json:"body"`     // 邮件正文
+	Path    string `json:"path"`     // 附件路径
 }
 
 var dialer *SMTPDialer
@@ -54,7 +54,7 @@ func getSMTPDialer() SMTPDialer {
 	return *dialer
 }
 
-func formatAddressList(l []EmailUser) []string {
+func formatAddressList(l []Role) []string {
 	res := make([]string, len(l))
 	m := ge.NewMessage()
 	for i, v := range l {
@@ -63,7 +63,7 @@ func formatAddressList(l []EmailUser) []string {
 	return res
 }
 
-func Send(c *EmailCTX) (err error) {
+func Send(c *Context) (err error) {
 	dia := getSMTPDialer()
 	m := ge.NewMessage()
 	m.SetHeader("From", dia.Username)
@@ -75,7 +75,7 @@ func Send(c *EmailCTX) (err error) {
 		m.SetHeader("Bcc", formatAddressList(c.BccList)...)
 	}
 	if len(c.Path) > 0 {
-		if !path_tools.IsAbs(c.Path) {
+		if !junePath.IsAbs(c.Path) {
 			_, currently, _, _ := runtime.Caller(1)
 			filename := path.Join(path.Dir(currently), c.Path)
 			m.Attach(filename)

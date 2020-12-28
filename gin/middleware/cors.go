@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"github.com/520MianXiangDuiXiang520/GinTools/gin_tools"
+	juneGin "github.com/520MianXiangDuiXiang520/GinTools/gin"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -31,7 +31,7 @@ func CorsHandler(accessList []string) gin.HandlerFunc {
 		// 设置返回格式是json
 		if method == "OPTIONS" {
 			context.Abort()
-			context.JSON(http.StatusOK, gin_tools.SuccessRespHeader)
+			context.JSON(http.StatusOK, juneGin.SuccessRespHeader)
 		}
 		context.Next()
 	}

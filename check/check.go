@@ -1,5 +1,5 @@
 // 通过标签自动检查请求格式是否正确
-package check_tools
+package check
 
 import (
 	"fmt"

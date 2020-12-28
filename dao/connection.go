@@ -1,11 +1,11 @@
-package dao_tools
+package dao
 
 import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/520MianXiangDuiXiang520/GinTools/check_tools"
-	"github.com/520MianXiangDuiXiang520/GinTools/log_tools"
+	"github.com/520MianXiangDuiXiang520/GinTools/check"
+	"github.com/520MianXiangDuiXiang520/GinTools/log"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"strings"
@@ -15,7 +15,7 @@ import (
 
 // 定义建立数据库连接时所需要的值，可以使用任意类型的 struct,
 // 只要 json 标签于此对于即可，对于类似 Engine, User 等必须参数
-// 我们会使用 check_tools.Check 检查，请确保值正确。
+// 我们会使用 check.Check 检查，请确保值正确。
 type DBConnector struct {
 	Engine      string        `json:"engine" check:"not null"`
 	DBName      string        `json:"db_name" check:"not null"`
@@ -76,7 +76,7 @@ func transform(from, to interface{}) error {
 		utils.ExceptionLog(err, fmt.Sprintf("Fail to UnMarchall"))
 		return err
 	}
-	if !check_tools.Check(to) {
+	if !check.Check(to) {
 		return errors.New("miss field")
 	}
 	return nil
@@ -131,7 +131,7 @@ func InitDBSetting(set interface{}) error {
 // 获取一个 *gorm.DB 对象，使用前必须使用 InitDBSetting 初始化连接
 // 否则会导致 panic
 func GetDB() *gorm.DB {
-	if !check_tools.Check(dbConnector) {
+	if !check.Check(dbConnector) {
 		panic("Database configuration is not loaded")
 	}
 	if db == nil {

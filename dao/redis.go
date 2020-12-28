@@ -1,4 +1,4 @@
-package dao_tools
+package dao
 
 import (
 	"github.com/garyburd/redigo/redis"

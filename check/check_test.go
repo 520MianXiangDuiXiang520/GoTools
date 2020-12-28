@@ -1,4 +1,4 @@
-package check_tools
+package check
 
 import (
 	"fmt"

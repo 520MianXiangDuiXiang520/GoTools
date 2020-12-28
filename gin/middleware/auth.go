@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"github.com/520MianXiangDuiXiang520/GinTools/gin_tools"
+	juneGin "github.com/520MianXiangDuiXiang520/GinTools/gin"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -23,7 +23,7 @@ func Auth(af AuthFunc) gin.HandlerFunc {
 		if !ok {
 			context.Abort()
 			context.JSON(http.StatusUnauthorized,
-				gin_tools.UnauthorizedRespHeader)
+				juneGin.UnauthorizedRespHeader)
 		}
 		context.Set("user", user)
 	}

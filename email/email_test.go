@@ -1,4 +1,4 @@
-package email_tools
+package email
 
 import (
 	"testing"
@@ -8,16 +8,16 @@ func init() {
 	InitSMTPDialer("smtp.163.com", "153649xxxxx@163.com", "xxxxxxx", 25)
 }
 func TestSend(t *testing.T) {
-	e := Send(&EmailCTX{
-		ToList: []EmailUser{
+	e := Send(&Context{
+		ToList: []Role{
 			{Address: "17xxxx5643@qq.com", Name: "QQ"},
 		},
-		CcList: []EmailUser{
+		CcList: []Role{
 			{Address: "17xxxx4650@st.xxx.edu.cn", Name: "NUC"},
 			{Address: "zhxxxxxo23@outlook.com", Name: "Outlook"},
 			{Address: "30xxxx3164@qq.com", Name: "30xxxx3164"},
 		},
-		BccList: []EmailUser{
+		BccList: []Role{
 			{Address: "31xxxx0040@qq.com", Name: "BCC"},
 		},
 		Subject: "每日一题",
