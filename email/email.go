@@ -33,6 +33,10 @@ type Context struct {
 var dialer *SMTPDialer
 var once sync.Once
 
+// InitSMTPDialer 会初始化一个私有的 dialer,
+// 以后可以使用 Send 方法时会使用这个内部的私有 dialer 对象，
+// 该方法适用于一个程序中只需要一个 SMTP dialer 的情况，如果
+// 需要多个 dialer 对象，请使用 Init 和 SendWithDialer 方法
 func InitSMTPDialer(host, username, password string, port int) {
 	if dialer == nil || dialer.dialer == nil {
 		once.Do(func() {
@@ -47,11 +51,21 @@ func InitSMTPDialer(host, username, password string, port int) {
 	}
 }
 
+// Init 同 gomail.NewDialer
+func Init(host, username, password string, port int) *ge.Dialer {
+	return ge.NewDialer(host, port, username, password)
+}
+
 func getSMTPDialer() SMTPDialer {
 	if dialer == nil || dialer.dialer == nil {
 		panic("SMTP not connected！, please do InitSMTPDialer")
 	}
 	return *dialer
+}
+
+// GetDialer 在使用 InitSMTPDialer 初始化内部私有 dialer 后，可以使用该函数获取此 dialer 的指针
+func GetDialer() *ge.Dialer {
+	return getSMTPDialer().dialer
 }
 
 func formatAddressList(l []Role) []string {
@@ -63,8 +77,8 @@ func formatAddressList(l []Role) []string {
 	return res
 }
 
-func Send(c *Context) (err error) {
-	dia := getSMTPDialer()
+// SendWithDialer 使用自定义的 dialer 发送邮件
+func SendWithDialer(dia *ge.Dialer, c *Context) (err error) {
 	m := ge.NewMessage()
 	m.SetHeader("From", dia.Username)
 	m.SetHeader("To", formatAddressList(c.ToList)...)
@@ -86,6 +100,12 @@ func Send(c *Context) (err error) {
 	}
 	m.SetHeader("Subject", c.Subject)
 	m.SetBody("text/html", c.Body)
-	err = dia.dialer.DialAndSend(m)
+	err = dia.DialAndSend(m)
 	return err
+}
+
+// Send 配合 InitSMTPDialer 使用
+func Send(c *Context) (err error) {
+	dia := getSMTPDialer()
+	return SendWithDialer(dia.dialer, c)
 }
