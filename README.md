@@ -1,20 +1,19 @@
-# GinTools
+# GoTools
 
-[![GoDoc](https://camo.githubusercontent.com/ba58c24fb3ac922ec74e491d3ff57ebac895cf2deada3bf1c9eebda4b25d93da/68747470733a2f2f676f646f632e6f72672f6769746875622e636f6d2f67616d6d617a65726f2f776f726b6572706f6f6c3f7374617475732e737667)](https://pkg.go.dev/github.com/520MianXiangDuiXiang520/GinTools)
+[![GoDoc](https://camo.githubusercontent.com/ba58c24fb3ac922ec74e491d3ff57ebac895cf2deada3bf1c9eebda4b25d93da/68747470733a2f2f676f646f632e6f72672f6769746875622e636f6d2f67616d6d617a65726f2f776f726b6572706f6f6c3f7374617475732e737667)](https://pkg.go.dev/github.com/520MianXiangDuiXiang520/GoTools)
 
-<a title="GPL" target="_blank" href="https://github.com/520MianXiangDuiXiang520/GinTools/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-red.svg?style=flat-square"></a>
-<a title="Last Commit" target="_blank" href="https://github.com/520MianXiangDuiXiang520/JuneGoBlog/commits/master"><img src="https://img.shields.io/github/last-commit/520MianXiangDuiXiang520/GinTools.svg?style=flat-square&color=FF9900"></a>
+<a title="GPL" target="_blank" href="https://github.com/520MianXiangDuiXiang520/GoTools/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-red.svg?style=flat-square"></a>
+<a title="Last Commit" target="_blank" href="https://github.com/520MianXiangDuiXiang520/JuneGoBlog/commits/master"><img src="https://img.shields.io/github/last-commit/520MianXiangDuiXiang520/GoTools.svg?style=flat-square&color=FF9900"></a>
 <a href="https://gitmoji.carloscuesta.me">
 <img src="https://img.shields.io/badge/gitmoji-%20😜%20😍-FFDD67.svg?style=flat-square" alt="Gitmoji"></a>
-<a href="https://goreportcard.com/badge/github.com/520MianXiangDuiXiang520/GinTools"> <img src="https://goreportcard.com/badge/github.com/520MianXiangDuiXiang520/GinTools" /></a>
-<a href="https://codeclimate.com/github/520MianXiangDuiXiang520/GinTools/maintainability"><img src="https://api.codeclimate.com/v1/badges/ed575aea812a025dfcc9/maintainability" /></a>
+<a href="https://goreportcard.com/badge/github.com/520MianXiangDuiXiang520/GoTools"> <img src="https://goreportcard.com/badge/github.com/520MianXiangDuiXiang520/GoTools" /></a>
+<a href="https://codeclimate.com/github/520MianXiangDuiXiang520/GoTools/maintainability"><img src="https://api.codeclimate.com/v1/badges/ed575aea812a025dfcc9/maintainability" /></a>
 
-包含一些平时 Go Web 开发过程中积累的小工具，一开始只是几个 Gin 相关的几个函数，后来慢慢加了一些其他的东西，名字也懒得改了。
-
+包含一些平时 Go 开发过程中积累的小工具。
 使用：
 
 ```go
-go get github.com/520MianXiangDuiXiang520/GinTools
+go get github.com/520MianXiangDuiXiang520/GoTools
 ```
 
 ## CheckTools
@@ -55,7 +54,7 @@ go get github.com/520MianXiangDuiXiang520/GinTools
 
 `struct`:
 
-如果一个 struct 包含另一个 struct, 则允许递归判断, 具体用法请参考 [godoc](https://pkg.go.dev/github.com/520MianXiangDuiXiang520/GinTools/check_tools)
+如果一个 struct 包含另一个 struct, 则允许递归判断, 具体用法请参考 [godoc](https://pkg.go.dev/github.com/520MianXiangDuiXiang520/GoTools/check_tools)
 
 ## daoTools
 
@@ -65,20 +64,9 @@ go get github.com/520MianXiangDuiXiang520/GinTools
 * `Transaction`: 一个数据库事务工具
 * `redis`: 一个 redis 连接工具
 
-具体用法请参考 [godoc](https://pkg.go.dev/github.com/520MianXiangDuiXiang520/GinTools/gin_tools/dao_tools) 文档
+具体用法请参考 [godoc](https://pkg.go.dev/github.com/520MianXiangDuiXiang520/GoTools/gin_tools/dao_tools) 文档
 
 ## emailTools
 
-对 goemail 的简单封装，可以更加简单的实现群发，抄送，密送，附件等功能, 具体使用请参考 [godoc](https://pkg.go.dev/github.com/520MianXiangDuiXiang520/GinTools/email_tools)
-
-## ginTools
-
-gin 框架的几个工具函数，包括：
-
-* URL 调度器
-* 业务处理器
-* 中间件：
-  * 鉴权
-  * 认证
-  * CORS
+对 goemail 的简单封装，可以更加简单的实现群发，抄送，密送，附件等功能, 具体使用请参考 [godoc](https://pkg.go.dev/github.com/520MianXiangDuiXiang520/GoTools/email_tools)
 
