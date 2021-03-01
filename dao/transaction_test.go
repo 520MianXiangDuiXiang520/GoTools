@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/jinzhu/gorm"
 	"log"
+	"os"
 	"testing"
 	"time"
 )
@@ -27,7 +28,7 @@ func init() {
 func ExampleUseTransaction() {
 
 	def := func(db *gorm.DB, res *Table, id uint, name string) (ok bool, err error) {
-		err = db.Select("id = ?, lname = ?", id, name).First(&res).Error
+		err = db.Select("id = ?, name = ?", id, name).First(&res).Error
 		if err != nil {
 			return false, err
 		}
@@ -44,7 +45,7 @@ func ExampleUseTransaction() {
 		&gorm.DB{}, &res, uint(83), "13",
 	}
 
-	resL, err := UseTransaction(def, args)
+	resL, err := UseTransaction(def, args, log.New(os.Stdout, "[ Transaction ] ", log.LstdFlags))
 	if err != nil {
 		log.Println(err)
 	}

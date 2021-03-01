@@ -2,7 +2,7 @@ package dao
 
 import (
 	"errors"
-	"github.com/520MianXiangDuiXiang520/GinTools/log"
+	"log"
 	"reflect"
 )
 
@@ -17,19 +17,19 @@ type DaoLogic interface{}
 // 2. 返回应该至少有一个是 error 类型的，如果有多个返回值时，error 类型的应该作为最后一个。
 //
 // 函数会返回 def 执行的结果，他以 reflect.Value 切片的形式返回
-func UseTransaction(def DaoLogic, args []interface{}) ([]reflect.Value, error) {
+func UseTransaction(def DaoLogic, args []interface{}, logger *log.Logger) ([]reflect.Value, error) {
 	var err error
 	tx := GetDB().Begin()
 	tx.LogMode(true)
 	defer func() {
 		// def 抛出 panic, 回滚
 		if pan := recover(); pan != nil {
-			utils.ExceptionLog(pan.(error), "Transaction execution failed and has been rolled back！")
+			logger.Printf("Transaction execution failed and has been rolled back！error: %v", pan)
 			tx.Rollback()
 		}
 		// def 返回了一个 err, 回滚
 		if err != nil {
-			utils.ExceptionLog(err, "Transaction return false and has been rolled back！")
+			logger.Printf("Transaction return false and has been rolled back！error: %v", err)
 			tx.Rollback()
 		}
 		tx.Commit()

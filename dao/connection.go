@@ -4,8 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/520MianXiangDuiXiang520/GinTools/check"
-	"github.com/520MianXiangDuiXiang520/GinTools/log"
+	"github.com/520MianXiangDuiXiang520/GoTools/check"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"strings"
@@ -29,7 +28,7 @@ type DBConnector struct {
 	LogMode     bool          `json:"log_mode"`
 }
 
-func (conn *DBConnector) NewConnect() *gorm.DB {
+func (conn *DBConnector) NewConnect() (*gorm.DB, error) {
 	connURI := ""
 	switch strings.ToLower(conn.Engine) {
 	case "mysql":
@@ -44,11 +43,9 @@ func (conn *DBConnector) NewConnect() *gorm.DB {
 
 	db, err := gorm.Open(conn.Engine, connURI)
 	if err != nil {
-		msg := fmt.Sprintf("Fail to open db, URI is %s", connURI)
-		utils.ExceptionLog(err, msg)
-		panic(err)
+		return nil, err
 	}
-	return db
+	return db, nil
 }
 
 // 设置连接池参数
@@ -68,13 +65,11 @@ var (
 func transform(from, to interface{}) error {
 	data, err := json.Marshal(from)
 	if err != nil {
-		utils.ExceptionLog(err, fmt.Sprintf("marshal %v Fail!", from))
-		return err
+		return fmt.Errorf("marshal %v Fail! (%w)", from, err)
 	}
 	err = json.Unmarshal(data, &to)
 	if err != nil {
-		utils.ExceptionLog(err, fmt.Sprintf("Fail to UnMarchall"))
-		return err
+		return fmt.Errorf("fail to UnMarchall %w", err)
 	}
 	if !check.Check(to) {
 		return errors.New("miss field")
@@ -134,10 +129,14 @@ func GetDB() *gorm.DB {
 	if !check.Check(dbConnector) {
 		panic("Database configuration is not loaded")
 	}
+	var err error
 	if db == nil {
 		dbLock.Lock()
 		if db == nil {
-			db = dbConnector.NewConnect()
+			db, err = dbConnector.NewConnect()
+			if err != nil {
+				panic(err)
+			}
 			setup(dbConnector.MaxIdleConn, dbConnector.MaxOpenConn, dbConnector.MaxLifetime, dbConnector.LogMode)
 		}
 		dbLock.Unlock()

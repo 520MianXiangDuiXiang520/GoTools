@@ -60,7 +60,7 @@ func doOnce(idle, open, num int) {
 	}
 	wg.Add(num)
 	for i := 0; i < num; i++ {
-		InitDBSetting(&conn)
+		_ = InitDBSetting(&conn)
 		go func(i int) {
 
 			db := GetDB()
@@ -89,11 +89,11 @@ func getTime(idle, open, num int) {
 }
 func TestInitDBSetting2(t *testing.T) {
 
-	// getTime(10, 20, 500)
+	getTime(10, 20, 500)
 	// getTime(20, 40, 500)
 	// getTime(40, 80, 500)
 	// getTime(80, 160, 500)
 	// getTime(160, 320, 500)
-	getTime(320, 640, 500)
+	// getTime(320, 640, 500)
 	// getTime(200, 320, 500)
 }
