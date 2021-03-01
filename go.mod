@@ -1,4 +1,4 @@
-module github.com/520MianXiangDuiXiang520/GinTools
+module github.com/520MianXiangDuiXiang520/GoTools
 
 go 1.14
 
