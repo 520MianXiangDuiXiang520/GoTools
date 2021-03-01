@@ -39,7 +39,10 @@ func TestInitDBSetting(t *testing.T) {
 		MLifetime: time.Second * 3,
 		LogMode:   false,
 	}
-	InitDBSetting(&conn)
+	err := InitDBSetting(&conn)
+	if err != nil {
+		t.Error(err)
+	}
 	// db := GetDB()
 	// db.CreateTable(&Table{})
 }
@@ -87,13 +90,14 @@ func getTime(idle, open, num int) {
 	}
 	fmt.Printf("idle: %d, open: %d, --- %v ms \n", idle, open, res/6/1000/1000)
 }
-func TestInitDBSetting2(t *testing.T) {
 
-	getTime(10, 20, 500)
-	// getTime(20, 40, 500)
-	// getTime(40, 80, 500)
-	// getTime(80, 160, 500)
-	// getTime(160, 320, 500)
-	// getTime(320, 640, 500)
-	// getTime(200, 320, 500)
-}
+// func TestInitDBSetting2(t *testing.T) {
+//
+// 	getTime(10, 20, 500)
+// 	// getTime(20, 40, 500)
+// 	// getTime(40, 80, 500)
+// 	// getTime(80, 160, 500)
+// 	// getTime(160, 320, 500)
+// 	// getTime(320, 640, 500)
+// 	// getTime(200, 320, 500)
+// }

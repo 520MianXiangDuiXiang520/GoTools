@@ -1,7 +1,7 @@
 package email
 
 import (
-	junePath "github.com/520MianXiangDuiXiang520/GinTools/path"
+	path2 "github.com/520MianXiangDuiXiang520/GoTools/path"
 	ge "gopkg.in/gomail.v2"
 	"path"
 	"runtime"
@@ -89,7 +89,7 @@ func SendWithDialer(dia *ge.Dialer, c *Context) (err error) {
 		m.SetHeader("Bcc", formatAddressList(c.BccList)...)
 	}
 	if len(c.Path) > 0 {
-		if !junePath.IsAbs(c.Path) {
+		if !path2.IsAbs(c.Path) {
 			_, currently, _, _ := runtime.Caller(1)
 			filename := path.Join(path.Dir(currently), c.Path)
 			m.Attach(filename)

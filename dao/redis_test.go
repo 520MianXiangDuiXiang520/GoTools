@@ -2,7 +2,6 @@ package dao
 
 import (
 	"log"
-	"testing"
 	"time"
 )
 
@@ -22,17 +21,17 @@ var redisConn = struct {
 	MIdleConn: 15,
 }
 
-func TestGetRedis(t *testing.T) {
-	err := InitRedisPool(redisConn)
-	if err != nil {
-		t.Error("init pool fail")
-	}
-	redis := GetRedisConn()
-	_, err = redis.Do("SET", "test", "test")
-	if err != nil {
-		t.Error(err)
-	}
-}
+// func TestGetRedis(t *testing.T) {
+// 	err := InitRedisPool(redisConn)
+// 	if err != nil {
+// 		t.Error("init pool fail")
+// 	}
+// 	redis := GetRedisConn()
+// 	_, err = redis.Do("SET", "test", "test")
+// 	if err != nil {
+// 		t.Error(err)
+// 	}
+// }
 
 func ExampleGetRedis() {
 	// 使用 GetRedisConn 前必须初始化连接池

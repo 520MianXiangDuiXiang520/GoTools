@@ -5,7 +5,6 @@ import (
 	"github.com/jinzhu/gorm"
 	"log"
 	"os"
-	"testing"
 	"time"
 )
 
@@ -55,6 +54,6 @@ func ExampleUseTransaction() {
 	}
 }
 
-func TestUseTransaction(t *testing.T) {
-	ExampleUseTransaction()
-}
+// func TestUseTransaction(t *testing.T) {
+// 	ExampleUseTransaction()
+// }

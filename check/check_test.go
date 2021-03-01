@@ -1,7 +1,6 @@
 package check
 
 import (
-	"fmt"
 	"testing"
 )
 
@@ -37,15 +36,6 @@ func TestCheck2(t *testing.T) {
 	if ok {
 		t.Errorf("")
 	}
-}
-
-func TestFindNum(t *testing.T) {
-	fmt.Println(findNum("len: [0, 10]"))
-}
-
-func TestCheckRequest2(t *testing.T) {
-	s := "111"
-	CheckRequest(&s)
 }
 
 type numTest struct {
